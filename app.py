@@ -25,9 +25,22 @@ with st.sidebar:
     st.warning('Each submitted question uses paid API calls. Keep your key private.')
 key=os.getenv('OPENAI_API_KEY','')
 model=os.getenv('OPENAI_MODEL','gpt-4o-mini')
-with st.form('question_form'):
-    question=st.text_area('Ask a question about the clinic database',max_chars=1500)
-    submitted=st.form_submit_button('Ask the database')
+with st.form("question_form"):
+    question = st.text_area(
+        "Ask a question about the clinic database",
+        max_chars=1500,
+    )
+    shot_mode = st.radio(
+        "SQL prompting mode",
+        options=["zero", "one"],
+        format_func=lambda mode: {
+            "zero": "Zero-shot: no worked examples",
+            "one": "One-shot: one worked example",
+        }[mode],
+        horizontal=True,
+    )
+
+    submitted = st.form_submit_button("Ask the database")
 if submitted:
     if not question.strip():
         st.warning('Enter a question first.')
@@ -37,7 +50,7 @@ if submitted:
         generated=None
         try:
             with st.spinner('Generating and running a read-only query…'):
-                generated=generate_sql(question,key,model)
+                generated = generate_sql(question,key,model,shot_mode=shot_mode)
                 if generated['sql'] is None:
                     st.info(generated['explanation'])
                 else:
