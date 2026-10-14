@@ -1,0 +1,86 @@
+[
+  {
+    "sql": "-- Dataset reference date: 2026-10-13.\n-- Count patients with recorded Type 2 diabetes.\nSELECT COUNT(DISTINCT pc.patient_id) AS patient_count\nFROM patient_condition pc JOIN condition c ON c.condition_id=pc.condition_id\nWHERE c.condition_name='Type 2 diabetes'",
+    "columns": [
+      "patient_count"
+    ],
+    "rows": [
+      [
+        21
+      ]
+    ]
+  },
+  {
+    "sql": "-- Provider with the most visits last month (September 2026).\nSELECT p.provider_name, COUNT(*) AS visit_count\nFROM visit v JOIN provider p ON p.provider_id=v.provider_id\nWHERE v.visit_date >= date('2026-10-13','start of month','-1 month')\nAND v.visit_date < date('2026-10-13','start of month')\nGROUP BY p.provider_id,p.provider_name ORDER BY visit_count DESC,p.provider_id LIMIT 1",
+    "columns": [
+      "provider_name",
+      "visit_count"
+    ],
+    "rows": [
+      [
+        "Fictional Provider 1",
+        4
+      ]
+    ]
+  },
+  {
+    "sql": "-- Average completed age of patients with asthma.\nSELECT ROUND(AVG(CAST(strftime('%Y','2026-10-13') AS INTEGER)\n- CAST(strftime('%Y',p.date_of_birth) AS INTEGER)\n- (strftime('%m-%d','2026-10-13') < strftime('%m-%d',p.date_of_birth))),2) AS average_age\nFROM patient p JOIN patient_condition pc ON pc.patient_id=p.patient_id\nJOIN condition c ON c.condition_id=pc.condition_id WHERE c.condition_name='Asthma'",
+    "columns": [
+      "average_age"
+    ],
+    "rows": [
+      [
+        52.19
+      ]
+    ]
+  },
+  {
+    "sql": "-- Common active prescriptions among patients with hypertension.\nSELECT m.medication_name, COUNT(DISTINCT rx.patient_id) AS patient_count\nFROM prescription rx JOIN medication m ON m.medication_id=rx.medication_id\nJOIN patient_condition pc ON pc.patient_id=rx.patient_id\nJOIN condition c ON c.condition_id=pc.condition_id\nWHERE c.condition_name='Hypertension' AND rx.start_date <= '2026-10-13'\nAND (rx.end_date IS NULL OR rx.end_date >= '2026-10-13')\nGROUP BY m.medication_id,m.medication_name ORDER BY patient_count DESC,m.medication_name",
+    "columns": [
+      "medication_name",
+      "patient_count"
+    ],
+    "rows": [
+      [
+        "Lisinopril",
+        17
+      ],
+      [
+        "Acetaminophen",
+        7
+      ],
+      [
+        "Cetirizine",
+        5
+      ],
+      [
+        "Sertraline",
+        4
+      ],
+      [
+        "Levothyroxine",
+        3
+      ],
+      [
+        "Metformin",
+        3
+      ],
+      [
+        "Albuterol",
+        2
+      ],
+      [
+        "Atorvastatin",
+        2
+      ],
+      [
+        "Sumatriptan",
+        2
+      ],
+      [
+        "Omeprazole",
+        1
+      ]
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+test_blocked_queries (test_project.DatabaseTests.test_blocked_queries) ... ok
+test_cte (test_project.DatabaseTests.test_cte) ... ok
+test_foreign_keys (test_project.DatabaseTests.test_foreign_keys) ... ok
+test_no_visit_patients (test_project.DatabaseTests.test_no_visit_patients) ... ok
+test_patient_count (test_project.DatabaseTests.test_patient_count) ... ok
+test_truncation (test_project.DatabaseTests.test_truncation) ... ok
+test_visit_count (test_project.DatabaseTests.test_visit_count) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK
+
+Table counts:
+{
+  "patient": 100,
+  "provider": 8,
+  "visit": 500,
+  "condition": 10,
+  "patient_condition": 224,
+  "medication": 15,
+  "prescription": 179
+}
+
+Live GPT calls and browser UI were not tested in the build environment.
